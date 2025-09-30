@@ -1,0 +1,280 @@
+@layout()
+  <div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        Dashboard
+      </h1>
+      <p class="text-gray-600">
+        Welcome back, {{ auth.user.name }}!
+      </p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="p-2 bg-blue-100 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">
+              Total Projects
+            </p>
+            <p class="text-2xl font-semibold text-gray-900">
+              {{ stats.totalProjects }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="p-2 bg-green-100 rounded-lg">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">
+              Total Tasks
+            </p>
+            <p class="text-2xl font-semibold text-gray-900">
+              {{ stats.totalTasks }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="p-2 bg-purple-100 rounded-lg">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">
+              Completed Tasks
+            </p>
+            <p class="text-2xl font-semibold text-gray-900">
+              {{ stats.completedTasks }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Recent Projects -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold text-gray-900">
+              Recent Projects
+            </h2>
+            <a
+              href="{{ route('projects.index') }}"
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              View All →
+          </a>
+          </div>
+        </div>
+        <div class="p-6">
+          @if(projects.length > 0)
+            <div class="space-y-4">
+              @each(project in projects.slice(0, 5))
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <h3 class="font-medium text-gray-900">
+                      {{ project.name }}
+                    </h3>
+                    @if(project.description)
+                      <p class="text-sm text-gray-600 mt-1">
+                        {{ project.description }}
+                      </p>
+                    @endif
+                    <p class="text-xs text-gray-500 mt-2">
+                      {{ project.tasks.length }} tasks
+                    </p>
+                  </div>
+                  <div class="flex space-x-2">
+                    <a
+                      href="{{ route('projects.show', { id: project.id }) }}"
+                      class="text-blue-600 hover:text-blue-800"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+
+                      </svg>
+                    </a>
+                    <a
+                      href="{{ route('projects.edit', { id: project.id }) }}"
+                      class="text-gray-600 hover:text-gray-800"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              @endeach
+            </div>
+          @else
+            <div class="text-center py-8">
+              <svg
+                class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+
+              </svg>
+              <p class="text-gray-500 mb-4">
+                No projects yet
+              </p>
+              <a
+                href="{{ route('projects.create') }}"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Create Your First Project
+            </a>
+            </div>
+          @endif
+        </div>
+      </div>
+
+      <!-- Recent Tasks -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold text-gray-900">
+              Recent Tasks
+            </h2>
+            <a
+              href="{{ route('projects.index') }}"
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              View All →
+          </a>
+          </div>
+        </div>
+        <div class="p-6">
+          @if(recentTasks.length > 0)
+            <div class="space-y-4">
+              @each(task in recentTasks.slice(0, 5))
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      @if(task.completed)
+                        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"
+                          />
+
+                        </svg>
+                      @else
+                        <div class="w-5 h-5 border-2 border-gray-300 rounded-full">
+                        </div>
+                      @endif
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900 {{ task.completed ? 'line-through' : '' }}">
+                        {{ task.title }}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{ task.project.name }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <form
+                      method="POST"
+                      action="{{ route('projects.tasks.toggle', { id: task.project.id, taskId: task.id }) }}"
+                    >
+                      {{ csrfField() }}
+                    <button type="submit" class="text-gray-600 hover:text-gray-800">
+                        @if(task.completed)
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+
+                          </svg>
+                        @else
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+
+                          </svg>
+                        @endif
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              @endeach
+            </div>
+          @else
+            <div class="text-center py-8">
+              <svg
+                class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+
+              </svg>
+              <p class="text-gray-500">
+                No tasks yet
+              </p>
+            </div>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+@end
